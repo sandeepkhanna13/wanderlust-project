@@ -14,7 +14,7 @@ const userRouter = require("./routes/user.js");
 const bookingRouter = require("./routes/booking.js");
 const adminRoutes = require("./routes/admin.js");
 const session = require("express-session");
-const MongoStore = require('connect-mongo').default;
+const MongoStore = require("connect-mongo").default;
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -45,14 +45,14 @@ app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
 const store = MongoStore.create({
-  mongoUrl:dbUrl,
-  crypto:{
+  mongoUrl: dbUrl,
+  crypto: {
     secret: process.env.SECRET,
   },
   touchAfter: 24 * 3600,
 });
 
-store.on("error",(err)=>{
+store.on("error", (err) => {
   console.log("ERROR IN MONGO SESSION STORE", err);
 });
 
@@ -115,6 +115,7 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render("listings/error.ejs", { message });
 });
 
-app.listen(8080, () => {
-  console.log("app is listening on port 8080.");
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`app is listening on port ${PORT}.`);
 });
