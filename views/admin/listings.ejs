@@ -1,0 +1,50 @@
+<% layout('/layouts/boilerplate.ejs') %>
+
+    <div class="admin-container">
+
+        <div class="admin-sidebar">
+            <h4>Admin</h4>
+            <a href="/admin/dashboard">📊 Dashboard</a>
+            <a href="/admin/listings">🏠 Listings</a>
+            <a href="/admin/users">👤 Users</a>
+            <a href="/admin/reviews">⭐ Reviews</a>
+            <a href="/admin/bookings">📅 Bookings</a>
+        </div>
+
+        <div class="admin-content">
+            <h2>All Listings</h2>
+
+            <table class="table">
+                <tr>
+                    <th>Image</th>
+                    <th>Title</th>
+                    <th>Price</th>
+                    <th>Owner</th>
+                    <th>Action</th>
+                </tr>
+
+                <% listings.forEach(l=> { %>
+                    <tr>
+                        <td>
+                            <img src="<%= l.image.url %>" width="80" style="border-radius:8px;">
+                        </td>
+                        <td>
+                            <%= l.title %>
+                        </td>
+                        <td>₹<%= l.price %>
+                        </td>
+                        <td>
+                            <%= l.owner.username %>
+                        </td>
+                        <td>
+                            <form action="/admin/listings/<%= l._id %>?_method=DELETE" method="POST">
+                                <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <% }) %>
+
+            </table>
+        </div>
+
+    </div>

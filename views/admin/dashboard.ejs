@@ -1,0 +1,173 @@
+<% layout('/layouts/boilerplate.ejs') -%>
+
+    <div class="admin-container">
+
+        <!-- Sidebar -->
+        <div class="admin-sidebar">
+            <h4 class="mb-4">Admin <span style="color: #fe424d;"><%= currentUser.username %></span></h4>
+
+            <a href="/admin/dashboard">📊 Dashboard</a>
+            <a href="/admin/listings">🏠 Listings</a>
+            <a href="/admin/users">👤 Users</a>
+            <a href="/admin/reviews">⭐ Reviews</a>
+            <a href="/admin/bookings">📅 Bookings</a>
+        </div>
+
+        <!-- Main Content -->
+        <div class="admin-content">
+
+            <h2 class="mb-4">Admin Dashboard</h2>
+
+            <div class="dashboard-cards">
+
+                <div class="dash-card">
+                    <h5>Total Listings</h5>
+                    <p>
+                        <%= totalListings %>
+                    </p>
+                </div>
+
+                <div class="dash-card">
+                    <h5>Total Users</h5>
+                    <p>
+                        <%= totalUsers %>
+                    </p>
+                </div>
+
+                <div class="dash-card">
+                    <h5>Total Reviews</h5>
+                    <p>
+                        <%= totalReviews %>
+                    </p>
+                </div>
+
+                <div class="dash-card">
+                    <h5>Total Bookings</h5>
+                    <p>
+                        <%= totalBookings || 0 %>
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="charts-container">
+            
+                <div class="chart-box">
+                    <h6>Listings Analytics</h6>
+                    <canvas id="listingsChart"></canvas>
+                </div>
+            
+                <div class="chart-box">
+                    <h6>Users Analytics</h6>
+                    <canvas id="usersChart"></canvas>
+                </div>
+            
+                <div class="chart-box">
+                    <h6>Reviews Analytics</h6>
+                    <canvas id="reviewsChart"></canvas>
+                </div>
+            
+                <div class="chart-box">
+                    <h6>Bookings Analytics</h6>
+                    <canvas id="bookingsChart"></canvas>
+                </div>
+            
+            </div>
+            
+        </div>
+
+    </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        function createMonthlyGraph(id, label, total, color) {
+
+            // 🔥 Split total into fake monthly data
+            const monthlyData = [
+                Math.floor(total * 0.2),
+                Math.floor(total * 0.25),
+                Math.floor(total * 0.3),
+                Math.floor(total * 0.25)
+            ];
+
+            // growth line
+            const growth = monthlyData.map((val, i) => {
+                if (i === 0) return val;
+                return ((val - monthlyData[i - 1]) / monthlyData[i - 1] * 100).toFixed(1);
+            });
+
+            new Chart(document.getElementById(id), {
+                data: {
+                    labels: ["Jan", "Feb", "Mar", "Apr"],
+
+                    datasets: [
+
+                        // 📊 BAR
+                        {
+                            type: "bar",
+                            label: label,
+                            data: monthlyData,
+                            backgroundColor: color,
+                            borderRadius: 8,
+                            yAxisID: 'y'
+                        },
+
+                        // 📈 LINE
+                        {
+                            type: "line",
+                            label: "Growth %",
+                            data: growth,
+                            borderColor: "#00b894",
+                            backgroundColor: "#00b894",
+                            tension: 0.4,
+                            yAxisID: 'y1'
+                        }
+
+                    ]
+                },
+
+                options: {
+                    responsive: true,
+
+                    plugins: {
+                        legend: {
+                            position: "top"
+                        }
+                    },
+
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            position: "left",
+                            title: {
+                                display: true,
+                                text: "Count"
+                            }
+                        },
+
+                        y1: {
+                            beginAtZero: true,
+                            position: "right",
+                            grid: {
+                                drawOnChartArea: false
+                            },
+                            title: {
+                                display: true,
+                                text: "Growth %"
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 🔥 CALL FOR ALL 4
+
+        createMonthlyGraph("listingsChart", "Listings", <%= totalListings %>, "#4f8cff");
+        createMonthlyGraph("usersChart", "Users", <%= totalUsers %>, "#b57edc");
+        createMonthlyGraph("reviewsChart", "Reviews", <%= totalReviews %>, "#fe424d");
+        createMonthlyGraph("bookingsChart", "Bookings", <%= totalBookings %>, "#36cfc9");
+
+    });
+</script>

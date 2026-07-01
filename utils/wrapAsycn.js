@@ -1,0 +1,13 @@
+//Use function keyword->
+// module.exports = function wrapAsync(fn) {
+//     return function (req, res, next) {
+//         fn(req, res, next).catch((err)=>next(err));
+//     };
+// };
+
+//Use arrow functions->
+module.exports = (fn) => {
+  return (req, res, next) => {
+    fn(req, res, next).catch((err) => next(err));
+  };
+};

@@ -1,0 +1,41 @@
+
+<% layout('/layouts/boilerplate.ejs') -%>
+
+    <div class="booking-container">
+        <div class="booking-card">
+
+            <h2 class="booking-title">Booking Confirmed 🎉</h2>
+
+            <p><b>Listing:</b>
+                <%= booking.listing.title %>
+            </p>
+            <p><b>User:</b>
+                <%= booking.user.username %>
+            </p>
+            <p><b>Check In:</b>
+                <%= booking.checkIn %>
+            </p>
+            <p><b>Check Out:</b>
+                <%= booking.checkOut %>
+            </p>
+            <p><b>Booking Status:</b>
+                <%= booking.status %>
+            </p>
+            <p class="price"><b>Total Price:</b> ₹<%= booking.totalPrice %>
+            </p>
+
+            <a href="/listings/<%= booking.listing._id %>/bookings/<%= booking._id %>/ticket"
+                class="btn btn-success download-btn">
+                Download Ticket 🎟️
+            </a>
+
+            <% if (booking.status==="confirmed" ) { %>
+                <form action="/listings/<%= booking.listing._id %>/bookings/<%= booking._id %>/cancel?_method=PUT" method="POST">
+                    <button class="btn btn-danger mt-2 w-100">Cancel Booking</button>
+                </form>
+            <% } else { %>
+                <button class="btn btn-secondary mt-2 w-100" disabled>Cancelled</button>
+            <% } %>
+
+        </div>
+    </div>

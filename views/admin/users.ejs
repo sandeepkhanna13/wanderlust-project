@@ -1,0 +1,50 @@
+<% layout('/layouts/boilerplate.ejs') %>
+
+    <div class="admin-container">
+
+        <div class="admin-sidebar">
+            <h4>Admin</h4>
+            <a href="/admin/dashboard">📊 Dashboard</a>
+            <a href="/admin/listings">🏠 Listings</a>
+            <a href="/admin/users">👤 Users</a>
+            <a href="/admin/reviews">⭐ Reviews</a>
+            <a href="/admin/bookings">📅 Bookings</a>
+        </div>
+
+        <div class="admin-content">
+            <h2>All Users</h2>
+
+            <table class="table">
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                </tr>
+
+                <% users.forEach(u=> { %>
+                    <tr>
+                        <td>
+                            <%= u.username %>
+                        </td>
+                        <td>
+                            <%= u.email %>
+                        </td>
+                        <td>
+                            <% if (u.role==="admin" ) { %>
+                                <span class="badge bg-success">Admin</span>
+                            <% } else { %>
+                                <span class="badge bg-secondary">User</span>
+                            <% } %>
+                        </td>
+                        <td>
+                            <form action="/admin/users/<%= u._id %>?_method=DELETE" method="POST">
+                                <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+
+            </table>
+        </div>
+
+    </div>

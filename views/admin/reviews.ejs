@@ -1,0 +1,46 @@
+<% layout('/layouts/boilerplate.ejs') %>
+
+<div class="admin-container">
+
+    <div class="admin-sidebar">
+        <h4>Admin</h4>
+        <a href="/admin/dashboard">📊 Dashboard</a>
+        <a href="/admin/listings">🏠 Listings</a>
+        <a href="/admin/users">👤 Users</a>
+        <a href="/admin/reviews">⭐ Reviews</a>
+        <a href="/admin/bookings">📅 Bookings</a>
+    </div>
+
+    <div class="admin-content">
+        <h2>All Reviews</h2>
+
+        <table class="table">
+            <tr>
+                <th>Comment</th>
+                <th>Rating</th>
+                <th>Author</th>
+            </tr>
+
+            <% reviews.forEach(r => { %>
+                <tr>
+                    <td><%= r.comment %></td>
+                    <td>⭐ <%= r.rating %></td>
+                    <td>
+                        <% if (r.author) { %>
+                            <%= r.author.username %>
+                        <% } else { %>
+                            <span class="text-danger">User Deleted</span>
+                        <% } %>
+                    </td>
+                    <td>
+                        <form action="/admin/reviews/<%= r._id %>?_method=DELETE" method="POST">
+                            <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+
+        </table>
+    </div>
+
+</div>

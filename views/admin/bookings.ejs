@@ -1,0 +1,68 @@
+<% layout('/layouts/boilerplate.ejs') %>
+
+    <div class="admin-container">
+
+        <!-- Sidebar -->
+        <div class="admin-sidebar">
+            <h4 class="mb-4">All Bookings</h4>
+
+            <a href="/admin/dashboard">📊 Dashboard</a>
+            <a href="/admin/listings">🏠 Listings</a>
+            <a href="/admin/users">👤 Users</a>
+            <a href="/admin/reviews">⭐ Reviews</a>
+            <a href="/admin/bookings">📅 Bookings</a>
+        </div>
+
+        <!-- Content -->
+        <div class="admin-content">
+
+            <h2 class="mb-4">All Bookings</h2>
+
+            <table class="table">
+                <tr>
+                    <th>User</th>
+                    <th>Listing</th>
+                    <th>CheckIn</th>
+                    <th>CheckOut</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                </tr>
+
+                <% bookings.forEach(b=> { %>
+                    <tr>
+                        <td>
+                            <%= b.user ? b.user.username : "User Deleted" %>
+                        </td>
+
+                        <td>
+                            <%= b.listing ? b.listing.title : "Listing Deleted" %>
+                        </td>
+
+                        <td>
+                            <%= b.checkIn.toDateString() %>
+                        </td>
+
+                        <td>
+                            <%= b.checkOut.toDateString() %>
+                        </td>
+
+                        <td>₹<%= b.totalPrice %></td>
+
+                        <td>
+                            <%= b.status %>
+                        </td>
+
+                        <td>
+                            <form action="/admin/bookings/<%= b._id %>?_method=DELETE" method="POST">
+                                <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
+                            </form>
+                        </td>
+
+                    </tr>
+                    <% }) %>
+
+            </table>
+
+        </div>
+
+    </div>
